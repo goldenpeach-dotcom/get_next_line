@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 20:29:38 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/23 17:24:16 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/23 19:32:39 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 
 char	*join(char	*stash, char	*buf)
 {
@@ -38,13 +38,35 @@ char	*join(char	*stash, char	*buf)
 		s_len--;
 		new[s_len] = stash[s_len];
 	}
-	return (free(stash),new);
+	free(stash);
+	return (new);
 }
 
-char	*cut_line(char	**stash, int pos)
+static char	*copy_remains(char *old_stash, int pos, int total_len, char *line)
+{
+	char	*new_stash;
+	int		i;
+
+	new_stash = malloc(total_len - pos);
+	if (!new_stash)
+	{
+		free(line);
+		return (NULL);
+	}
+	i = 0;
+	while (old_stash[pos + 1 + i])
+	{
+		new_stash[i] = old_stash[pos + 1 + i];
+		i++;
+	}
+	new_stash[i] = '\0';
+	free(old_stash);
+	return (new_stash);
+}
+
+char	*cut_line(char **stash, int pos)
 {
 	char	*line;
-	char	*new_stash;
 	int		i;
 
 	line = malloc(pos + 2);
@@ -56,17 +78,18 @@ char	*cut_line(char	**stash, int pos)
 	line[i] = '\0';
 	while ((*stash)[i])
 		i++;
-	if (i == pos + 1)
-		return (free(*stash), *stash = NULL, line);
-	new_stash = malloc(i - pos);
-	if (!new_stash)
-		return (free(line), NULL);
-	i = pos;
-	while ((*stash)[++i])
-		new_stash[i - pos - 1] = (*stash)[i];
-	new_stash[i - pos - 1] = '\0';
-	return (free(*stash), *stash = new_stash, line);
+	if ((*stash)[pos + 1] == '\0')
+	{
+		free(*stash);
+		*stash = NULL;
+		return (line);
+	}
+	*stash = copy_remains(*stash, pos, i, line);
+	if (!*stash)
+		return (NULL);
+	return (line);
 }
+
 
 int	find_nl(char	*st)
 {
@@ -84,14 +107,16 @@ int	find_nl(char	*st)
 	return (-1);
 }
 
-int	read_join(int fd, char *buf, char **stash)
-{
-	ssize_t	n;
+// int	read_join(int fd, char *buf, char **stash)
+// {
+// 	ssize_t	n;
 
-	n = read(fd, buf, BUFFER_SIZE);
-	if (n <= 0)
-		return (0);
-	buf[n] = '\0';
-	*stash = join(*stash, buf);
-	return (1);
-}
+// 	n = read(fd, buf, BUFFER_SIZE);
+// 	if (n <= 0)
+// 		return (0);
+// 	buf[n] = '\0';
+// 	*stash = join(*stash, buf);
+// 	if (!stash)
+// 		return (0);
+// 	return (1);
+// }

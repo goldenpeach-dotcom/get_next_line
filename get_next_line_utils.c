@@ -6,92 +6,13 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 20:29:38 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/23 19:32:39 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/24 20:27:18 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*join(char	*stash, char	*buf)
-{
-	char	*new;
-	size_t	s_len;
-	size_t	b_len;
-
-	s_len = 0;
-	b_len = 0;
-	while (stash && stash[s_len])
-		s_len++;
-	while (buf && buf[b_len])
-		b_len++;
-	new = malloc(s_len + b_len + 1);
-	if (!new)
-		return (free(stash), NULL);
-	new[s_len + b_len] = '\0';
-	while(b_len > 0)
-	{
-		b_len--;
-		new[s_len + b_len] = buf[b_len];
-	}		
-	while(s_len > 0)
-	{
-		s_len--;
-		new[s_len] = stash[s_len];
-	}
-	free(stash);
-	return (new);
-}
-
-static char	*copy_remains(char *old_stash, int pos, int total_len, char *line)
-{
-	char	*new_stash;
-	int		i;
-
-	new_stash = malloc(total_len - pos);
-	if (!new_stash)
-	{
-		free(line);
-		return (NULL);
-	}
-	i = 0;
-	while (old_stash[pos + 1 + i])
-	{
-		new_stash[i] = old_stash[pos + 1 + i];
-		i++;
-	}
-	new_stash[i] = '\0';
-	free(old_stash);
-	return (new_stash);
-}
-
-char	*cut_line(char **stash, int pos)
-{
-	char	*line;
-	int		i;
-
-	line = malloc(pos + 2);
-	if (!line)
-		return (NULL);
-	i = -1;
-	while (++i <= pos)
-		line[i] = (*stash)[i];
-	line[i] = '\0';
-	while ((*stash)[i])
-		i++;
-	if ((*stash)[pos + 1] == '\0')
-	{
-		free(*stash);
-		*stash = NULL;
-		return (line);
-	}
-	*stash = copy_remains(*stash, pos, i, line);
-	if (!*stash)
-		return (NULL);
-	return (line);
-}
-
-
-int	find_nl(char	*st)
+int	find_nl(char *st)
 {
 	int	i;
 
@@ -107,16 +28,76 @@ int	find_nl(char	*st)
 	return (-1);
 }
 
-// int	read_join(int fd, char *buf, char **stash)
-// {
-// 	ssize_t	n;
+char	*join_exact_with_len(char *stash, char *buf, size_t	*s_len, size_t pos)
+{
+	char	*new;
+	size_t	i;
+	
+	if (!stash)
+		*s_len = 0; 
+	new = malloc(*s_len + pos + 1);
+	if (!new)
+		return (free(stash), NULL);
+	i = 0;
+	while (i < *s_len)
+	{
+		new[i] = stash[i];
+		i++;
+	}
+	while (i < *s_len + pos)
+	{
+		new[i] = buf[i - *s_len];
+		i++;
+	}		
+	return (new[i] = '\0', *s_len = i, free(stash), new);
+}
+char	*cut_line(char	**stash, int pos, size_t *s_len)
+{
+	char	*line;
+	char	*new_stash;
+	int		i;
+	int		j;
 
-// 	n = read(fd, buf, BUFFER_SIZE);
-// 	if (n <= 0)
-// 		return (0);
-// 	buf[n] = '\0';
-// 	*stash = join(*stash, buf);
-// 	if (!stash)
-// 		return (0);
-// 	return (1);
-// }
+	line = malloc(pos + 2);
+	if (!line)
+		return (free(*stash), *stash = NULL, *s_len = 0, NULL);
+	i = -1;
+	while (++i <= pos)
+		line[i] = (*stash)[i];
+	line[i] = '\0';
+	j = 0;
+	while ((*stash)[i + j])
+		j++;
+	if (j == 0)
+		return (free(*stash), *stash = NULL, *s_len = 0,line);
+	new_stash = malloc(j + 1);
+	if (!new_stash)
+		return (free(line), free(*stash), *stash = NULL, *s_len = 0, NULL);
+	j = 0;
+	while (((new_stash[j] = (*stash)[i + j])))
+		j++;
+	return (*s_len = (size_t)j, free(*stash), *stash = new_stash, line);
+}
+char	*append_char(char *stash, char c, size_t *s_len)
+{
+	char	*new_str;
+	size_t	i;
+
+	new_str = malloc(*s_len + 2);
+	if (!new_str)
+		return (free(stash), NULL);
+	i = 0;
+	if (stash)
+	{
+		while (i < *s_len)
+		{
+			new_str[i] = stash[i];
+			i++;
+		}
+	}
+	new_str[i] = c;
+	new_str[i + 1] = '\0';
+	*s_len += 1; // 長さを1増やす
+	free(stash);
+	return (new_str);
+}

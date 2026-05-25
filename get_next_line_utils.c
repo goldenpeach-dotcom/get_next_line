@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 20:29:38 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/24 20:27:18 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/25 02:39:48 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ char	*join_exact_with_len(char *stash, char *buf, size_t	*s_len, size_t pos)
 {
 	char	*new;
 	size_t	i;
-	
+
 	if (!stash)
-		*s_len = 0; 
+		*s_len = 0;
 	new = malloc(*s_len + pos + 1);
 	if (!new)
 		return (free(stash), NULL);
@@ -51,33 +51,42 @@ char	*join_exact_with_len(char *stash, char *buf, size_t	*s_len, size_t pos)
 	}		
 	return (new[i] = '\0', *s_len = i, free(stash), new);
 }
+
 char	*cut_line(char	**stash, int pos, size_t *s_len)
 {
 	char	*line;
 	char	*new_stash;
-	int		i;
-	int		j;
+	size_t		i;
+	size_t		remain;
 
 	line = malloc(pos + 2);
 	if (!line)
 		return (free(*stash), *stash = NULL, *s_len = 0, NULL);
-	i = -1;
-	while (++i <= pos)
+	i = 0;
+	while (i <= (size_t)pos)
+	{
 		line[i] = (*stash)[i];
+		i++;
+	}
 	line[i] = '\0';
-	j = 0;
-	while ((*stash)[i + j])
-		j++;
-	if (j == 0)
-		return (free(*stash), *stash = NULL, *s_len = 0,line);
-	new_stash = malloc(j + 1);
+	remain = *s_len - i;
+	// printf("pos=%d s_len=%zu\n", pos, *s_len);
+	// printf("stash=%s\n", *stash);
+	// printf("i=%d\n", i);
+	if (remain == 0)
+		return (free(*stash), *stash = NULL, *s_len = 0, line);
+	new_stash = malloc(remain + 1);
 	if (!new_stash)
 		return (free(line), free(*stash), *stash = NULL, *s_len = 0, NULL);
-	j = 0;
-	while (((new_stash[j] = (*stash)[i + j])))
-		j++;
-	return (*s_len = (size_t)j, free(*stash), *stash = new_stash, line);
+	while (i < remain)
+	{
+		new_stash[i] = (*stash)[(size_t)pos + 1 + i];
+		i++;
+	}
+	new_stash[i] = '\0';
+	return (*s_len = remain, free(*stash), *stash = new_stash, line);
 }
+
 char	*append_char(char *stash, char c, size_t *s_len)
 {
 	char	*new_str;
@@ -97,7 +106,7 @@ char	*append_char(char *stash, char c, size_t *s_len)
 	}
 	new_str[i] = c;
 	new_str[i + 1] = '\0';
-	*s_len += 1; // 長さを1増やす
+	*s_len += 1;
 	free(stash);
 	return (new_str);
 }

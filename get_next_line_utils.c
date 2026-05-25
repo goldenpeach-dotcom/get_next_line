@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/22 20:29:38 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/25 02:39:48 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/25 12:37:35 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ char	*join_exact_with_len(char *stash, char *buf, size_t	*s_len, size_t pos)
 {
 	char	*new;
 	size_t	i;
+	size_t	total;
 
 	if (!stash)
 		*s_len = 0;
-	new = malloc(*s_len + pos + 1);
+	total = *s_len + pos;
+	new = malloc(total + 1);
 	if (!new)
 		return (free(stash), NULL);
 	i = 0;
@@ -44,7 +46,7 @@ char	*join_exact_with_len(char *stash, char *buf, size_t	*s_len, size_t pos)
 		new[i] = stash[i];
 		i++;
 	}
-	while (i < *s_len + pos)
+	while (i < total)
 	{
 		new[i] = buf[i - *s_len];
 		i++;

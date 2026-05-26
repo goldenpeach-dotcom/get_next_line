@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:33:56 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/27 00:08:54 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/27 01:15:56 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,18 +95,17 @@ char	*cut_line_update_save(char **save_ptr, size_t *s_len, size_t *al_size)
 	if (!o_save || *o_save == '\0')
 		return (free(*save_ptr), *save_ptr = NULL, *al_size = 0, NULL);
 	next_start = ft_strchr(o_save, '\n');
-	if (!next_start)
-	{
-		line = ft_substr(o_save, 0, *s_len);
-		return (free(o_save), *save_ptr = NULL, *s_len = 0, *al_size = 0, line);
-	}
-	line_len = (next_start - o_save) + 1;
+	line_len = *s_len;
+	if (next_start)
+		line_len = (next_start - o_save) + 1;
 	line = ft_substr(o_save, 0, line_len);
 	remain_len = *s_len - line_len;
 	*save_ptr = NULL;
 	*al_size = 0;
-	if (remain_len > 0 && (*al_size == remain_len + 1))
+	if (remain_len)
 		*save_ptr = ft_substr(o_save, line_len, remain_len);
+	if (remain_len)
+		*al_size = remain_len + 1;
 	*s_len = remain_len;
 	return (free(o_save), line);
 }

@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:42:30 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/25 20:26:47 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/26 17:17:17 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,49 +24,6 @@ size_t	ft_strlen(const char *str)
 	return (i);
 }
 
-char	*ft_strjoin_gnl(char const *s1, char const *s2)
-{
-	char	*res;
-	char	*p;
-
-	if (!s1)
-		s1 = "";
-	if (!s2)
-		return (NULL);
-	res = malloc(ft_strlen(s1)+ ft_strlen(s2) + 1);
-	if (!res)
-		return (NULL);
-	p = res;
-	while(*s1)
-			*p++ = *s1++;	
-	while(*s2)
-			*p++ = *s2++;
-	
-	*p = '\0';
-	return (res);
-}
-
-char	*ft_strdup(const char *s)
-{
-	size_t	len;
-	char	*dest;
-	size_t	i;
-
-	len = 0;
-	len = ft_strlen(s);
-	dest = malloc(len + 1);
-	if (!dest)
-		return (NULL);
-	i = 0;
-	while (s[i])
-	{
-		dest[i] = s[i];
-		i++;
-	}
-	dest[len] = '\0';
-	return (dest);
-}
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	s_len;
@@ -82,8 +39,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	else
 	{
 		cpy_len = s_len - start;
-			if (len < cpy_len)
-				cpy_len = len;
+		if (len < cpy_len)
+			cpy_len = len;
 	}
 	sub = malloc(sizeof(char) * (cpy_len + 1));
 	if (!sub)
@@ -94,4 +51,43 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		*p++ = *s++;
 	*p = '\0';
 	return (sub);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (s[i] == (char)c)
+			return ((char *)s + i);
+		i++;
+	}
+	if ((char)c == '\0')
+		return ((char *)s + i);
+	return (NULL);
+}
+
+char	*ft_strjoin_fast(char *save, size_t save_len, char *buf, size_t buf_len)
+{
+	char	*res;
+	char	*p;
+	char	*s1;
+
+	res = malloc(save_len + buf_len + 1);
+	if (!res)
+		return (free(save), NULL);
+	p = res;
+	s1 = save;
+	if (s1)
+	{
+		while (*s1)
+			*p++ = *s1++;
+	}
+	while (*buf)
+		*p++ = *buf++;
+	*p = '\0';
+	free(save);
+	return (res);
 }

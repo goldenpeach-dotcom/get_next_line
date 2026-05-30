@@ -238,15 +238,20 @@ Helped refine the structure of the README and translate it into English.
 ### アルゴリズムとデータ構造の詳細
 
 #### 全体の処理の流れ
--1.コンパイル時に以下のように指定するか、-Dフラグを使わないときは、ヘッダーファイルで既に指定されたバッファーサイズでreadする。
+1.コンパイル時に以下のように指定するか、-Dフラグを使わないときは、ヘッダーファイルで既に指定されたバッファーサイズでreadする。
 	cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c get_next_line.c get_next_line_utils.c get_next_line.h
--2. 静的変数（static char save,static size_t al_size）を定義しておく。
--3. 以下の場合はエラーとしてNULLを返す。
+
+2.静的変数（static char save,static size_t al_size）を定義しておく。
+
+3.以下の場合はエラーとしてNULLを返す。
 	(1)ファイルディスクリプタが０未満の時
 	(2)バッファーサイズが０の時
 	(3)read_and_join（以下参照）の実行後にsaveがない時
--4. saveにデータがないか改行がないときは、readしてデータを結合する（read_and_join）
--5. read_and_joinの結果、saveにデータがあれば、出力するデータを作り返す(cut_line_update_save)
+
+4.saveにデータがないか改行がないときは、readしてデータを結合する（read_and_join）
+
+5.read_and_joinの結果、saveにデータがあれば、出力するデータを作り返す(cut_line_update_save)
+
 ```text
 ┌──────────────────────────────┐
 │        get_next_line()       │
@@ -284,26 +289,34 @@ EOF（read=0）なら：
 ##### Optional: Function Overview（そのほかの関数の概要）
 - read_and_join(save, buffer)
 
-	ファイルディスクリプタから buffer にデータを読み込み、その新しいデータを save に結合します。
+	ファイルディスクリプタから buffer にデータを読み込み、
+	その新しいデータを save に結合します。
+	
 	必要に応じて、save のメモリ領域を再確保して拡張します。
 	更新された save を返します。
 
 - cut_line_update_save(save)
 
 	save の先頭から改行文字まで（改行を含む）を 1 行として切り出し、その行を返します。
+	
 	同時に、切り出した部分を除いた残りのデータだけを新しい save として更新します。
+	
 	古い save は free し、新しい save に置き換えます。
 
 - extend_save(save, c_len, n_len, al_size)
 
 	save に新しく追加するデータ量が現在の確保サイズを超える場合に、save のメモリ領域を拡張します。
+
 	確保サイズを 2 倍にするか、必要に応じて n_len + BUFFER_SIZE + 1024 の余裕を持ったサイズを確保します。
+	
 	古い save を新しい領域にコピーし、free した後、新しい save を返します。
 
 - append_buf(save, buf, s_len, r_bytes)
 
 	read() で読み込んだ buf の内容を save の末尾に追加します。
+	
 	追加中に改行文字 \n を検出した場合はフラグを立て、後続処理で行の切り出しができるようにします。
+	
 	コピー後、save の長さ（s_len）を更新し、改行が含まれていたかどうかを返します。
 
 #### 使用しているデータ構造
@@ -367,7 +380,7 @@ buffer は read のたびに上書きされる一時領域であり、
 
 	stash は「保持・結合・切り出し」
 
-という役割が明確になり、処理が安定する。
+	という役割が明確になり、処理が安定する。
 
 3. 動的メモリ（malloc）を使用する理由
 返す行の長さは実行時まで分からないため、
@@ -436,7 +449,7 @@ int main(void)
 }
 ```
 ■ コンパイル方法
-	BUFFER_SIZE はコンパイル時に指定できます。
+	BUFFER_SIZE はコンパイル時に指定できます。指定しない場合は　10　となります。
 
 ```コード
 cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c \

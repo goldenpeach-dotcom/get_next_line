@@ -239,7 +239,7 @@ Helped refine the structure of the README and translate it into English.
 
 #### 全体の処理の流れ
 1.コンパイル時に以下のように指定するか、-Dフラグを使わないときは、ヘッダーファイルで既に指定されたバッファーサイズでreadする。
-	cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c get_next_line.c get_next_line_utils.c get_next_line.h
+	cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c get_next_line.c get_next_line_utils.c
 
 2.静的変数（static char save,static size_t al_size）を定義しておく。
 

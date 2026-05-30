@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:42:30 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/26 17:17:17 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/30 12:05:23 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,25 +69,25 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin_fast(char *save, size_t save_len, char *buf, size_t buf_len)
-{
-	char	*res;
-	char	*p;
-	char	*s1;
+// char	*ft_strjoin_fast(char *save, size_t save_len, char *buf, size_t buf_len)
+// {
+// 	char	*res;
+// 	char	*p;
+// 	char	*s1;
 
-	res = malloc(save_len + buf_len + 1);
-	if (!res)
-		return (free(save), NULL);
-	p = res;
-	s1 = save;
-	if (s1)
-	{
-		while (*s1)
-			*p++ = *s1++;
-	}
-	while (*buf)
-		*p++ = *buf++;
-	*p = '\0';
-	free(save);
-	return (res);
-}
+// 	res = malloc(save_len + buf_len + 1);
+// 	if (!res)
+// 		return (free(save), NULL);
+// 	p = res;
+// 	s1 = save;
+// 	if (s1)
+// 	{
+// 		while (*s1)
+// 			*p++ = *s1++;
+// 	}
+// 	while (*buf)
+// 		*p++ = *buf++;
+// 	*p = '\0';
+// 	free(save);
+// 	return (res);
+// }

@@ -1,19 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/30 23:23:58 by mkaneko           #+#    #+#             */
+/*   Updated: 2026/05/30 23:27:48 by mkaneko          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include "get_next_line.h"
 
-static void test_fd(int fd, const char *label)
+static void	test_fd(int fd, const char *label)
 {
 	char	*line;
-	int	i = 1;
+	int		i;
 
+	i = 1;
 	printf("---- %s ----\n", label);
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while ((line != NULL)
 	{
 		printf("[%d] %s", i, line);
 		free(line);
 		i++;
+		line = get_next_line(fd);
 	}
 	printf("---- END %s ----\n\n", label);
 }

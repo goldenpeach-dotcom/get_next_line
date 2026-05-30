@@ -13,7 +13,7 @@ By calling the function repeatedly, you can read and return one line at a time f
 At compile time, specify the buffer size using the -D flag, or use the default value defined in the header file if no flag is provided:
 ```
 cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c \
-   get_next_line.c get_next_line_utils.c get_next_line.h
+   get_next_line.c get_next_line_utils.c
 ```
 
 Define static variables (static char *save, static size_t al_size) to preserve data between function calls.
@@ -88,6 +88,18 @@ EOF (read = 0):
 	Appends the contents of buf (read by read()) to the end of save.
 	If a newline character \n is detected during the append operation, a flag is set so that the next step can extract a complete line.
 	After copying, the length of save (s_len) is updated, and the function returns whether a newline was included.
+
+- ft_strlen (*char)
+
+	Counts the length of a string.
+
+- ft_substr (s, start, len)
+
+	Extracts a substring from a given string, starting at a specified position and for a specified length.
+
+- ft_strchr (s, c)
+
+	Searches for a specified character in a string and returns a pointer to its first occurrence.
 ------------------------------------------------------------------------------------------------
 #### Data Structures Used
 • Static Variables
@@ -239,6 +251,7 @@ Helped refine the structure of the README and translate it into English.
 
 #### 全体の処理の流れ
 1.コンパイル時に以下のように指定するか、-Dフラグを使わないときは、ヘッダーファイルで既に指定されたバッファーサイズでreadする。
+
 	cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c get_next_line.c get_next_line_utils.c
 
 2.静的変数（static char save,static size_t al_size）を定義しておく。
@@ -318,6 +331,18 @@ EOF（read=0）なら：
 	追加中に改行文字 \n を検出した場合はフラグを立て、後続処理で行の切り出しができるようにします。
 	
 	コピー後、save の長さ（s_len）を更新し、改行が含まれていたかどうかを返します。
+
+- ft_strlen(*char)
+
+	文字列の長さを数えます。
+
+- ft_substr(*s, start, len)
+
+	文字列を指定した位置から指定した長さだけ切りだします。
+
+- ft_strchr(s, c)
+
+	文字列の中から指定した文字が見つかったらその位置を返す。
 
 #### 使用しているデータ構造
 - static (静的変数)

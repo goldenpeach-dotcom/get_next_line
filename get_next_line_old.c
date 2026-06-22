@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnl_new.c                                          :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:33:56 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/06/23 01:56:22 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/05/27 01:15:56 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,8 @@ char	*get_next_line(int fd)
 	if (!save || !ft_strchr(save, '\n'))
 		save = read_and_join(fd, save, &save_len, &al_size);
 	if (!save)
-	{
-		free_all_static(&save, &al_size);
 		return (NULL);
-	}
 	line = cut_line_update_save(&save, &save_len, &al_size);
-	if (!line)
-		free_all_static(&save, &al_size);
 	return (line);
 }
 
@@ -66,7 +61,7 @@ char	*read_and_join(int fd, char *save, size_t *s_len, size_t *al_size)
 
 	buf = malloc(sizeof(char) * ((size_t)BUFFER_SIZE + 1));
 	if (!buf)
-		return (NULL);
+		return (free(save), NULL);
 	while (1)
 	{
 		r_bytes = read(fd, buf, BUFFER_SIZE);
@@ -84,7 +79,7 @@ char	*read_and_join(int fd, char *save, size_t *s_len, size_t *al_size)
 	if (save && r_bytes >= 0)
 		save[*s_len] = '\0';
 	if (r_bytes == -1)
-		return (free(buf), NULL);
+		return (free(buf), free(save), NULL);
 	return (free(buf), save);
 }
 
@@ -98,27 +93,19 @@ char	*cut_line_update_save(char **save_ptr, size_t *s_len, size_t *al_size)
 
 	o_save = *save_ptr;
 	if (!o_save || *o_save == '\0')
-		return (NULL);
+		return (free(*save_ptr), *save_ptr = NULL, *al_size = 0, NULL);
 	next_start = ft_strchr(o_save, '\n');
 	line_len = *s_len;
 	if (next_start)
 		line_len = (next_start - o_save) + 1;
 	line = ft_substr(o_save, 0, line_len);
-	if (!line)
-		return (NULL);
 	remain_len = *s_len - line_len;
-	if (remain_len > 0)
-	{
+	*save_ptr = NULL;
+	*al_size = 0;
+	if (remain_len)
 		*save_ptr = ft_substr(o_save, line_len, remain_len);
-		if (!save_ptr)
-			return (free(o_save), NULL);
+	if (remain_len)
 		*al_size = remain_len + 1;
-	}
-	else
-	{
-		*save_ptr = NULL;
-		*al_size = 0;
-	}
 	*s_len = remain_len;
 	return (free(o_save), line);
 }
@@ -136,7 +123,7 @@ char	*extend_save(char *save, size_t c_len, size_t n_len, size_t *al_size)
 		new_size = n_len + BUFFER_SIZE + 1024;
 	new_save = malloc(new_size);
 	if (!new_save)
-		return (NULL);
+		return (free(save), NULL);
 	i = 0;
 	if (save)
 	{

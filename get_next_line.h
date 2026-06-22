@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 00:04:55 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/30 23:42:02 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/06/23 01:30:06 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *str);
 char	*extend_save(char *save, size_t c_len, size_t n_len, size_t *al_size);
+void	free_all_static(char **save, size_t *al_size);
 
 #endif

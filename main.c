@@ -6,7 +6,7 @@
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/30 23:23:58 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/05/30 23:27:48 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/06/12 15:26:17 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@ static void	test_fd(int fd, const char *label)
 {
 	char	*line;
 	int		i;
-
 	i = 1;
 	printf("---- %s ----\n", label);
 	line = get_next_line(fd);
-	while ((line != NULL)
+	while (line != NULL)
 	{
 		printf("[%d] %s", i, line);
 		free(line);
@@ -34,9 +33,9 @@ static void	test_fd(int fd, const char *label)
 
 int	main(void)
 {
-	int fd1 = open("test1.txt", O_RDONLY);
-	int fd2 = open("test2.txt", O_RDONLY);
-	int fd3 = open("test3.txt", O_RDONLY);
+	int	fd1 = open("test1.txt", O_RDONLY);
+	int	fd2 = open("test2.txt", O_RDONLY);
+	int	fd3 = open("test3.txt", O_RDONLY);
 
 	if (fd1 < 0 || fd2 < 0 || fd3 < 0)
 	{

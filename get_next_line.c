@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gnl_new.c                                          :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:33:56 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/06/23 01:56:22 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/06/23 02:13:30 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	*cut_line_update_save(char **save_ptr, size_t *s_len, size_t *al_size)
 	if (remain_len > 0)
 	{
 		*save_ptr = ft_substr(o_save, line_len, remain_len);
-		if (!save_ptr)
+		if (!*save_ptr)
 			return (free(o_save), NULL);
 		*al_size = remain_len + 1;
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_new.c                          :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/25 16:42:30 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/06/23 01:29:21 by mkaneko          ###   ########.fr       */
+/*   Updated: 2026/06/23 01:13:09 by mkaneko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,6 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-void	free_all_static(char **save, size_t *al_size)
-{
-	free(*save);
-	*save = NULL;
-	*al_size = 0;
-}
 // char	*ft_strjoin_fast(char *save, size_t save_len, char *buf, size_t buf_len)
 // {
 // 	char	*res;

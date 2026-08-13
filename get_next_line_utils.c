@@ -1,99 +1,96 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils_new.c                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/25 16:42:30 by mkaneko           #+#    #+#             */
-/*   Updated: 2026/06/23 01:29:21 by mkaneko          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+/*安全にfreeしてNULLを返す*/
+char *ft_free(char **ptr)
 {
-	size_t	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+    if (ptr && *ptr)
+    {
+        free(*ptr);
+        *ptr = NULL;
+    }
+    return(NULL);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+size_t  ft_strlen(const char *str)
 {
-	size_t	s_len;
-	char	*sub;
-	size_t	cpy_len;
-	char	*p;
+    size_t i;
 
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	if (start >= s_len)
-		cpy_len = 0;
-	else
-	{
-		cpy_len = s_len - start;
-		if (len < cpy_len)
-			cpy_len = len;
-	}
-	sub = malloc(sizeof(char) * (cpy_len + 1));
-	if (!sub)
-		return (NULL);
-	p = sub;
-	s = s + start;
-	while (cpy_len--)
-		*p++ = *s++;
-	*p = '\0';
-	return (sub);
+    i = 0;
+    while(str[i])
+        i++;
+    return(i);
 }
 
 char	*ft_strchr(const char *s, int c)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char)c)
-			return ((char *)s + i);
-		i++;
-	}
-	if ((char)c == '\0')
-		return ((char *)s + i);
-	return (NULL);
+    if (!s)
+        return (NULL);
+    while (*s)
+    {
+        if (*s == (char)c)
+            return ((char *)s);
+        s++;
+    }
+    if ((char)c == '\0')
+        return ((char *)s);
+    return (NULL);
 }
 
-void	free_all_static(char **save, size_t *al_size)
+/*既存のsave bufを結合し、古いsaveを確実にfreeする。*/
+char    *ft_strjoin(char *s1, char  *s2)
 {
-	free(*save);
-	*save = NULL;
-	*al_size = 0;
-}
-// char	*ft_strjoin_fast(char *save, size_t save_len, char *buf, size_t buf_len)
-// {
-// 	char	*res;
-// 	char	*p;
-// 	char	*s1;
+    char    *res;
+    size_t  i;
+    size_t  j;
 
-// 	res = malloc(save_len + buf_len + 1);
-// 	if (!res)
-// 		return (free(save), NULL);
-// 	p = res;
-// 	s1 = save;
-// 	if (s1)
-// 	{
-// 		while (*s1)
-// 			*p++ = *s1++;
-// 	}
-// 	while (*buf)
-// 		*p++ = *buf++;
-// 	*p = '\0';
-// 	free(save);
-// 	return (res);
-// }
+    if (!s1)
+    {
+        s1 = malloc(1);
+        if (!s1)
+            return (NULL);
+        s1[0] = '\0';
+    }
+    res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+    if (!res)
+        return(ft_free(&s1));
+
+    i = 0;
+    while (s1[i])
+    {
+        res[i] = s1[i];
+        i++;
+    }
+    j = 0;
+    while (s2[j])
+        res[i++] = s2[j++];
+    res[i] = '\0';
+    free (s1);
+    return (res);
+}
+
+char *ft_substr(const char *s, unsigned int start, size_t len)
+{
+    char    *sub;
+    size_t  i;
+    size_t  cut_len;
+
+    if (!s)
+        return (NULL);
+    cut_len = ft_strlen(s + start);
+    if (start > ft_strlen(s))
+        len = 0;
+    if (len > cut_len)
+        len = cut_len;
+    sub = malloc(len + 1);
+    if (!sub)
+        return (NULL);
+    i = 0;
+    while( i < len)
+    {
+        sub[i] = s[start + i];
+        i++;
+    }
+    sub[i] = '\0';
+    return (sub);
+}
+

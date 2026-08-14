@@ -1,0 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkaneko <mkaneko@student.42tokyo.jp>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/23 00:04:55 by mkaneko           #+#    #+#             */
+/*   Updated: 2026/08/14 12:23:34 by mkaneko          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+
+# include <unistd.h>
+# include <stdlib.h>
+# include <stddef.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
+char	*get_next_line(int fd);
+// char	*read_and_join(int fd, char *save, size_t *s_len, size_t *al_size);
+// char	*cut_line_update_save(char **save_ptr, size_t *s_len, size_t *al_size);
+char 	*ft_free(char **ptr);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin(char *s1, char *s2);
+size_t	ft_strlen(const char *str);
+// char	*extend_save(char *save, size_t c_len, size_t n_len, size_t *al_size);
+// void	free_all_static(char **save, size_t *al_size);
+
+#endif
